@@ -1,0 +1,513 @@
+<?php
+// Resume เว็บไซต์แบบ Interactive สำหรับสมัครงาน (ปรับดีไซน์รูปโปรไฟล์ทรงกลมพรีเมียม โฟกัสหน้าชัดเจน)
+?>
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Resume | ชัยวัฒน์ รื่นรัมย์</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root { --navy:#172b4d; --blue:#315b82; }
+
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Sarabun', sans-serif; }
+  
+  .nav-link { display: flex; align-items: center; gap: .5rem; padding: .45rem .75rem; border-radius: .5rem; color: #475569; font-size: .85rem; transition: all .2s ease; white-space: nowrap; cursor: pointer; text-decoration: none; }
+  .nav-link:hover { background: #eaf0f6; color: var(--navy); }
+  .nav-link.active { background: #172b4d; color: white; box-shadow: 0 4px 12px #172b4d30; }
+  
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+  .section-card { background: white; border: 1px solid #e2e8f0; border-radius: 1rem; padding: clamp(1rem, 2vw, 2rem); transition: all 0.3s ease; }
+  .section-card:hover { border-color: #cbd5e1; box-shadow: 0 10px 25px -5px rgba(15,23,42,0.08); }
+  
+  .section-title { display: flex; align-items: center; gap: .6rem; color: #172b4d; font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem; }
+  .section-title:before { content: ''; display: block; width: 4px; height: 1.3rem; background: #315b82; border-radius: 2px; }
+  .sub-title { color: #172b4d; font-weight: 700; }
+  
+  .skill-chip { display: inline-flex; align-items: center; border: 1px solid #dbe4ee; background: #f8fafc; color: #334155; border-radius: 999px; padding: .35rem .75rem; font-size: .8rem; margin: .2rem; transition: all 0.2s ease; }
+  .skill-chip:hover { background: var(--navy); color: white; border-color: var(--navy); }
+
+  .reveal { opacity: 0; transform: translateY(20px); transition: all 0.6s cubic-bezier(0.5, 0, 0, 1); }
+  .reveal.active { opacity: 1; transform: translateY(0); }
+  
+  .progress-fill { width: 0; transition: width 1.2s cubic-bezier(0.5, 0, 0, 1); }
+  
+  @media print {
+    @page { size: A4; margin: 10mm; }
+    body { background: white !important; }
+    .no-print, aside, .topbar { display: none !important; }
+    .app-layout { display: block !important; max-width: none !important; padding: 0 !important; }
+    main { padding: 0 !important; }
+    .section-card { box-shadow: none !important; border: 1px solid #e2e8f0; break-inside: avoid; margin-bottom: 12px; }
+    .reveal { opacity: 1 !important; transform: none !important; }
+    .progress-fill { width: 100% !important; }
+  }
+</style>
+</head>
+<body class="min-h-screen bg-slate-50 text-slate-800">
+
+<!-- Topbar -->
+<div class="topbar sticky top-0 z-40 border-b border-slate-200/80 bg-white/95 backdrop-blur-md shadow-sm">
+  <div class="mx-auto flex max-w-[1200px] items-center justify-between gap-2 px-3 py-2">
+    
+    <!-- โลโก้ & ชื่อ -->
+    <a href="#overview" class="nav-link flex min-w-0 items-center gap-2 shrink-0 group !p-0 !bg-transparent">
+      <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-[#172b4d] to-[#315b82] text-xs font-bold text-white shadow">CR</div>
+      <div class="hidden sm:block">
+        <p class="font-bold text-[#172b4d] text-xs leading-tight">ชัยวัฒน์ รื่นรัมย์</p>
+        <p class="text-[9px] text-slate-500">SENIOR PROGRAMMER</p>
+      </div>
+    </a>
+
+    <!-- Mobile Horizontal Navigation Scroll -->
+    <nav id="mobileNav" class="flex items-center gap-1 overflow-x-auto no-scrollbar md:hidden px-1 py-0.5 max-w-[240px]">
+      <a class="nav-link active" href="#overview">ภาพรวม</a>
+      <a class="nav-link" href="#objective">จุดมุ่งหมาย</a>
+      <a class="nav-link" href="#profile">ข้อมูลส่วนตัว</a>
+      <a class="nav-link" href="#experience">ประสบการณ์</a>
+      <a class="nav-link" href="#achievements">ผลงาน</a>
+      <a class="nav-link" href="#skills">ทักษะ</a>
+      <a class="nav-link" href="#education">การศึกษา</a>
+      <a class="nav-link" href="#contact">ติดต่อ</a>
+    </nav>
+
+    <!-- ปุ่มพิมพ์ PDF -->
+    <div class="flex items-center shrink-0">
+      <button onclick="window.print()" class="no-print rounded-lg bg-[#172b4d] px-2.5 py-1.5 text-xs font-semibold text-white shadow transition-all hover:bg-[#27466f] active:scale-95 flex items-center gap-1">
+        <span>🖨️ <span class="hidden sm:inline">พิมพ์ / </span>PDF</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="app-layout mx-auto grid max-w-[1200px] grid-cols-1 gap-5 px-3 py-5 md:grid-cols-[240px_minmax(0,1fr)] md:px-6 md:py-8">
+  
+  <!-- Desktop Sidebar -->
+  <aside class="no-print hidden md:block h-fit rounded-2xl border border-slate-200 bg-white/90 p-4 shadow-sm backdrop-blur-sm sticky top-[75px] reveal active">
+    <div class="mb-3 px-2">
+      <p class="text-[11px] font-bold uppercase tracking-[.15em] text-slate-400">Navigation</p>
+    </div>
+    <nav id="sideNav" class="flex flex-col gap-1">
+      <a class="nav-link active" href="#overview">ภาพรวม</a>
+      <a class="nav-link" href="#objective">จุดมุ่งหมาย</a>
+      <a class="nav-link" href="#profile">ข้อมูลส่วนตัว</a>
+      <a class="nav-link" href="#experience">ประสบการณ์ทำงาน</a>
+      <a class="nav-link" href="#achievements">หน้าที่และผลงาน</a>
+      <a class="nav-link" href="#skills">ทักษะความสามารถ</a>
+      <a class="nav-link" href="#education">การศึกษา</a>
+      <a class="nav-link" href="#contact">ติดต่อ</a>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="min-w-0 space-y-5">
+    
+    <!-- Hero Section with Profile Picture Area -->
+    <section id="overview" class="overflow-hidden rounded-2xl bg-gradient-to-br from-[#172b4d] via-[#1e3a5f] to-[#315b82] text-white shadow-lg reveal active relative">
+      <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10 mix-blend-overlay"></div>
+      
+      <div class="relative p-6 sm:p-8 md:p-10 z-10 flex flex-col md:flex-row items-center gap-6 md:gap-8 text-center md:text-left">
+        
+        <!-- รูปโปรไฟล์ทรงกลมปรับสัดส่วนใหม่ โฟกัสช่วงบนไม่ให้หัวขาด -->
+        <div class="shrink-0">
+          <div class="relative h-32 w-32 sm:h-38 sm:w-38 rounded-full overflow-hidden border-4 border-white/30 bg-slate-800/50 shadow-2xl flex items-center justify-center group ring-4 ring-white/10">
+            <img src="S__183607301.jpg" alt="ชัยวัฒน์ รื่นรัมย์" class="h-full w-full object-cover object-[center_15%] transition-transform duration-500 group-hover:scale-105">
+          </div>
+        </div>
+
+        <!-- รายละเอียดโปรไฟล์ -->
+        <div class="flex-1">
+          <!-- <span class="inline-block rounded-full bg-blue-400/20 px-3 py-1 text-[11px] font-bold uppercase tracking-[.2em] text-blue-200 border border-blue-400/30 mb-2">Curriculum Vitae</span> -->
+          <h1 class="text-3xl font-bold leading-tight sm:text-4xl md:text-5xl tracking-tight">ชัยวัฒน์ รื่นรัมย์</h1>
+          <p class="mt-1 text-sm sm:text-base tracking-widest text-slate-300 font-light">CHAIWAT RAUNRUM</p>
+          
+          <div class="mt-4 flex flex-wrap justify-center md:justify-start items-center gap-2">
+            <span class="rounded-full border border-white/30 bg-white/10 px-3.5 py-1 text-xs font-semibold backdrop-blur-md">Programmer ระดับ Senior</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Stats Grid ด้านล่าง Hero -->
+      <div class="relative px-6 pb-6 sm:px-8 sm:pb-8 md:px-10 z-10">
+        <div class="grid grid-cols-2 gap-3 md:grid-cols-3">
+          <div class="rounded-xl border border-white/15 bg-white/5 p-3 backdrop-blur-sm"><p class="text-[11px] text-blue-200">ประสบการณ์</p><p class="mt-0.5 text-lg font-bold">6 ปีขึ้นไป</p></div>
+          <div class="rounded-xl border border-white/15 bg-white/5 p-3 backdrop-blur-sm"><p class="text-[11px] text-blue-200">ความเชี่ยวชาญหลัก</p><p class="mt-0.5 text-lg font-bold">ERP & Workflow</p></div>
+          <div class="col-span-2 rounded-xl border border-white/15 bg-white/5 p-3 backdrop-blur-sm md:col-span-1"><p class="text-[11px] text-blue-200">การเชื่อมต่อ</p><p class="mt-0.5 text-lg font-bold">REST API & SQL</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Objective -->
+    <section id="objective" class="section-card reveal">
+      <h2 class="section-title">จุดมุ่งหมายในการทำงาน</h2>
+      <p class="text-sm sm:text-[15px] leading-7 text-slate-600">มุ่งมั่นนำความรู้และประสบการณ์ด้านการพัฒนาซอฟต์แวร์ ระบบ ERP และการจัดการฐานข้อมูล มาประยุกต์ใช้ในการพัฒนาระบบที่ตอบโจทย์ความต้องการขององค์กร มีความพร้อมในการเรียนรู้เทคโนโลยีใหม่ ๆ พัฒนาทักษะการเขียนโปรแกรมและการวิเคราะห์ระบบอย่างต่อเนื่อง เพื่อสร้างผลงานที่มีคุณภาพ เพิ่มประสิทธิภาพการทำงาน และเติบโตไปพร้อมกับองค์กร</p>
+    </section>
+
+    <!-- Profile -->
+    <section id="profile" class="section-card reveal">
+      <h2 class="section-title">ข้อมูลส่วนตัว</h2>
+      <div class="grid grid-cols-2 gap-3 sm:grid-cols-3">
+        <div class="rounded-xl bg-slate-50 p-3 border border-slate-100"><p class="text-[11px] text-slate-500">ชื่อเล่น</p><p class="mt-0.5 font-semibold text-[#172b4d]">บาส</p></div>
+        <div class="rounded-xl bg-slate-50 p-3 border border-slate-100"><p class="text-[11px] text-slate-500">วันเกิด</p><p class="mt-0.5 font-semibold text-[#172b4d]">7 ส.ค. 2540</p></div>
+        <div class="rounded-xl bg-slate-50 p-3 border border-slate-100"><p class="text-[11px] text-slate-500">อายุ</p><p class="mt-0.5 font-semibold text-[#172b4d]">29 ปี</p></div>
+        <div class="rounded-xl bg-slate-50 p-3 border border-slate-100"><p class="text-[11px] text-slate-500">สัญชาติ</p><p class="mt-0.5 font-semibold text-[#172b4d]">ไทย</p></div>
+        <div class="rounded-xl bg-slate-50 p-3 border border-slate-100 col-span-2 sm:col-span-2"><p class="text-[11px] text-slate-500">สถานภาพ</p><p class="mt-0.5 font-semibold text-[#172b4d]">สมรส</p></div>
+      </div>
+    </section>
+
+    <!-- Experience Timeline -->
+    <section id="experience" class="section-card reveal">
+      <h2 class="section-title">ประสบการณ์การทำงาน</h2>
+      <div class="space-y-6 mt-4">
+        <article class="relative border-l-2 border-[#315b82]/30 pl-4 sm:pl-6 group">
+          <span class="absolute -left-[7px] top-1 h-3 w-3 rounded-full bg-[#315b82] ring-4 ring-white"></span>
+          <div class="flex flex-col justify-between gap-1 sm:flex-row sm:items-center bg-slate-50 p-3.5 rounded-xl border border-slate-100">
+            <div>
+              <h3 class="font-bold text-base text-[#172b4d]">บริษัท บิซโพเทนเชียล จำกัด</h3>
+              <p class="text-xs sm:text-sm font-semibold text-[#315b82]">Programmer (ระดับ Senior)</p>
+            </div>
+            <span class="w-fit rounded-full bg-[#172b4d]/10 px-3 py-1 text-[11px] font-bold text-[#172b4d]">2563 – ปัจจุบัน</span>
+          </div>
+          <div class="mt-3 pl-1">
+            <p class="text-xs sm:text-sm font-bold text-slate-700 mb-1.5">หน้าที่รับผิดชอบ</p>
+            <ul class="list-disc space-y-1.5 pl-4 text-xs sm:text-[14px] leading-relaxed text-slate-600 marker:text-[#315b82]">
+              <li>พัฒนาและปรับปรุงระบบ Software และ ERP สำหรับหน่วยงานภาครัฐและเอกชน</li>
+              <li>วิเคราะห์ความต้องการลูกค้า ออกแบบระบบ และพัฒนาโปรแกรมให้ตรงตามความต้องการ</li>
+              <li>พัฒนา REST API เพื่อเชื่อมต่อข้อมูลระหว่างระบบและ Mobile Application</li>
+              <li>ทดสอบระบบ (UAT) จัดทำเอกสาร อบรมผู้ใช้งาน และนำระบบขึ้น Production</li>
+              <li>ดูแลฐานข้อมูล ตรวจสอบและแก้ไขปัญหาระบบ รวมถึงประสานงานกับลูกค้าและทีมพัฒนา</li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="relative border-l-2 border-slate-200 pl-4 sm:pl-6 group">
+          <span class="absolute -left-[7px] top-1 h-3 w-3 rounded-full bg-slate-300 ring-4 ring-white"></span>
+          <div class="flex flex-col justify-between gap-1 sm:flex-row sm:items-center bg-slate-50/50 p-3.5 rounded-xl border border-slate-100">
+            <div>
+              <h3 class="font-bold text-sm sm:text-base text-[#172b4d]">บริษัท เมโทรซิสเต็มส์คอร์ปอเรชั่น จำกัด (มหาชน)</h3>
+              <p class="text-xs sm:text-sm font-semibold text-slate-500">Programmer (ฝึกงาน)</p>
+            </div>
+            <span class="w-fit rounded-full bg-slate-100 px-3 py-1 text-[11px] font-bold text-slate-500">6 เดือน</span>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- Achievements -->
+    <section id="achievements" class="section-card reveal">
+      <h2 class="section-title">หน้าที่ความรับผิดชอบและผลงานที่สำคัญ</h2>
+      <div class="grid gap-4 md:grid-cols-2 mt-4">
+        <article class="bg-slate-50 p-4 rounded-xl border border-slate-100">
+          <div class="flex items-center gap-2.5 mb-2">
+            <div class="p-1.5 bg-blue-100 rounded-lg text-[#315b82] text-sm">💻</div>
+            <h3 class="sub-title text-sm sm:text-base">การพัฒนาระบบซอฟต์แวร์</h3>
+          </div>
+          <ul class="list-disc space-y-1 pl-4 text-xs sm:text-sm leading-relaxed text-slate-600">
+            <li>วิเคราะห์ความต้องการ ออกแบบ และพัฒนาซอฟต์แวร์สำหรับภาครัฐและเอกชน</li>
+            <li>พัฒนา REST API เชื่อมต่อระบบและ Mobile Application</li>
+            <li>ทดสอบระบบ (UAT) จัดทำเอกสาร อบรมผู้ใช้งาน และนำระบบขึ้น Production</li>
+          </ul>
+        </article>
+        
+        <article class="bg-slate-50 p-4 rounded-xl border border-slate-100">
+          <div class="flex items-center gap-2.5 mb-2">
+            <div class="p-1.5 bg-blue-100 rounded-lg text-[#315b82] text-sm">🏢</div>
+            <h3 class="sub-title text-sm sm:text-base">การพัฒนาระบบ ERP & Workflow</h3>
+          </div>
+          <ul class="list-disc space-y-1 pl-4 text-xs sm:text-sm leading-relaxed text-slate-600">
+            <li>พัฒนาระบบ ERP ครอบคลุมงานจัดซื้อ (PR/PO) ตรวจรับสินค้า และคลังสินค้า</li>
+            <li>พัฒนาระบบการเงิน บุคคล จองรถ บริหารโครงการ และจัดการสิทธิ์ผู้ใช้งาน</li>
+            <li>พัฒนา Approval Workflow เพื่อเพิ่มความรวดเร็วในการอนุมัติเอกสาร</li>
+          </ul>
+        </article>
+
+        <article class="bg-slate-50 p-4 rounded-xl border border-slate-100">
+          <div class="flex items-center gap-2.5 mb-2">
+            <div class="p-1.5 bg-blue-100 rounded-lg text-[#315b82] text-sm">🔗</div>
+            <h3 class="sub-title text-sm sm:text-base">การเชื่อมต่อระบบ</h3>
+          </div>
+          <ul class="list-disc space-y-1 pl-4 text-xs sm:text-sm leading-relaxed text-slate-600">
+            <li>ออกแบบและพัฒนา Backend API เพื่อแลกเปลี่ยนข้อมูลกับระบบภายนอก</li>
+            <li>เชื่อมต่อระบบซอฟต์แวร์และ Mobile Application อย่างมีประสิทธิภาพ</li>
+          </ul>
+        </article>
+
+        <article class="bg-slate-50 p-4 rounded-xl border border-slate-100">
+          <div class="flex items-center gap-2.5 mb-2">
+            <div class="p-1.5 bg-blue-100 rounded-lg text-[#315b82] text-sm">🗄️</div>
+            <h3 class="sub-title text-sm sm:text-base">การจัดการฐานข้อมูล</h3>
+          </div>
+          <ul class="list-disc space-y-1 pl-4 text-xs sm:text-sm leading-relaxed text-slate-600">
+            <li>ใช้ SQL จัดการและแก้ไขข้อมูล พร้อมวิเคราะห์ปัญหาฐานข้อมูลและ System Log</li>
+            <li>พัฒนาระบบจัดการสิทธิ์และนำเข้าข้อมูล พร้อมประเมินผลกระทบก่อนปรับปรุง</li>
+          </ul>
+        </article>
+
+        <article class="bg-slate-50 p-4 rounded-xl border border-slate-100">
+          <div class="flex items-center gap-2.5 mb-2">
+            <div class="p-1.5 bg-blue-100 rounded-lg text-[#315b82] text-sm">⚙️</div>
+            <h3 class="sub-title text-sm sm:text-base">การจัดการ Source Code & AI</h3>
+          </div>
+          <ul class="list-disc space-y-1 pl-4 text-xs sm:text-sm leading-relaxed text-slate-600">
+            <li>ตรวจสอบและทดสอบ Source Code เมื่อมีการเปลี่ยนแปลงเวอร์ชัน</li>
+            <li>ใช้ Claude AI, Devin, ChatGPT และ Gemini ช่วย Code Review และวิเคราะห์โค้ด</li>
+            <li>วิเคราะห์ Root Cause Analysis และแก้ไขปัญหาก่อนขึ้น Production</li>
+          </ul>
+        </article>
+
+        <article class="bg-slate-50 p-4 rounded-xl border border-slate-100">
+          <div class="flex items-center gap-2.5 mb-2">
+            <div class="p-1.5 bg-blue-100 rounded-lg text-[#315b82] text-sm">🤝</div>
+            <h3 class="sub-title text-sm sm:text-base">การดูแลระบบและประสานงาน</h3>
+          </div>
+          <ul class="list-disc space-y-1 pl-4 text-xs sm:text-sm leading-relaxed text-slate-600">
+            <li>ดูแลและสนับสนุนการใช้งานระบบซอฟต์แวร์ของลูกค้า</li>
+            <li>ประสานงานกับลูกค้าและทีมพัฒนา เพื่อติดตามและแก้ไขปัญหา</li>
+            <li>เตรียมความพร้อมสำหรับโครงการใหม่ของหน่วยงานภาครัฐ</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <!-- Skills -->
+    <section id="skills" class="section-card reveal">
+      <h2 class="section-title">ทักษะและความสามารถ</h2>
+      <div class="space-y-5">
+        <div>
+          <h3 class="text-[12px] font-bold uppercase tracking-widest text-slate-400 mb-2.5 border-b border-slate-100 pb-1">ทักษะด้านการพัฒนาซอฟต์แวร์</h3>
+          <div><span class="skill-chip">PHP</span><span class="skill-chip">Bootstrap</span><span class="skill-chip">JavaScript</span><span class="skill-chip">Ajax</span><span class="skill-chip">CSS</span><span class="skill-chip">jQuery</span><span class="skill-chip">HTML5</span></div>
+        </div>
+        
+        <div class="grid md:grid-cols-2 gap-4">
+          <div>
+            <h3 class="text-[12px] font-bold uppercase tracking-widest text-slate-400 mb-2.5 border-b border-slate-100 pb-1">เครื่องมือพัฒนา & AI</h3>
+            <div><span class="skill-chip">Visual Studio</span><span class="skill-chip">Notepad++</span><span class="skill-chip">Claude AI</span><span class="skill-chip">Devin</span><span class="skill-chip">ChatGPT</span><span class="skill-chip">Gemini</span><span class="skill-chip">Postman</span></div>
+          </div>
+          <div>
+            <h3 class="text-[12px] font-bold uppercase tracking-widest text-slate-400 mb-2.5 border-b border-slate-100 pb-1">ฐานข้อมูล & การเชื่อมต่อ</h3>
+            <div><span class="skill-chip">REST API</span><span class="skill-chip">SQL Server</span><span class="skill-chip">MySQL</span><span class="skill-chip">Navicat</span><span class="skill-chip">DBeaver</span></div>
+          </div>
+        </div>
+
+        <div>
+          <h3 class="text-[12px] font-bold uppercase tracking-widest text-slate-400 mb-2.5 border-b border-slate-100 pb-1">ทักษะด้านภาษา</h3>
+          <div class="grid gap-3 sm:grid-cols-2 pt-1">
+            <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-100">
+              <div class="mb-1.5 flex justify-between text-xs sm:text-sm font-semibold">
+                <span class="text-[#172b4d]">ภาษาไทย</span><span class="text-[#315b82]">ดีมาก</span>
+              </div>
+              <div class="h-2 rounded-full bg-slate-200 overflow-hidden">
+                <div class="progress-fill h-full rounded-full bg-gradient-to-r from-[#315b82] to-[#172b4d]" data-width="95%"></div>
+              </div>
+            </div>
+            <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-100">
+              <div class="mb-1.5 flex justify-between text-xs sm:text-sm font-semibold">
+                <span class="text-[#172b4d]">ภาษาอังกฤษ</span><span class="text-[#315b82]">พอใช้</span>
+              </div>
+              <div class="h-2 rounded-full bg-slate-200 overflow-hidden">
+                <div class="progress-fill h-full rounded-full bg-gradient-to-r from-[#315b82] to-[#4a7c9f]" data-width="50%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Education -->
+    <section id="education" class="section-card reveal">
+      <h2 class="section-title">การศึกษา</h2>
+      <div class="flex gap-4 rounded-xl border border-slate-100 bg-gradient-to-r from-slate-50 to-white p-4 sm:p-5">
+        <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[#172b4d] text-xl text-white shadow-inner">🎓</div>
+        <div>
+          <h3 class="text-base sm:text-lg font-bold text-[#172b4d]">ปริญญาตรี</h3>
+          <div class="mt-1 text-xs sm:text-sm text-slate-600 space-y-0.5">
+            <p><span class="font-semibold text-slate-700">สถานศึกษา:</span> มหาวิทยาลัยราชภัฏบุรีรัมย์</p>
+            <p><span class="font-semibold text-slate-700">คณะ:</span> วิทยาศาสตร์</p>
+            <p><span class="font-semibold text-slate-700">สาขาวิชา:</span> วิทยาการคอมพิวเตอร์</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact" class="section-card reveal">
+      <h2 class="section-title">ช่องทางการติดต่อ</h2>
+      <div class="grid gap-3 sm:grid-cols-2">
+        <a href="tel:0883748390" class="group flex items-center gap-3 rounded-xl border border-slate-200 p-3 hover:border-[#315b82] hover:bg-[#f8fafc] transition-all">
+          <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-blue-100 text-[#315b82]">📞</div>
+          <div><p class="text-[10px] font-semibold uppercase text-slate-400">โทรศัพท์</p><p class="text-xs sm:text-sm font-bold text-[#172b4d]">088-374-8390</p></div>
+        </a>
+        <div class="group flex items-center gap-3 rounded-xl border border-slate-200 p-3 hover:border-[#06C755] hover:bg-[#f0fdf4] transition-all cursor-pointer">
+          <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#06C755]/10 text-[#06C755] font-bold text-xs">LINE</div>
+          <div><p class="text-[10px] font-semibold uppercase text-slate-400">LINE ID</p><p class="text-xs sm:text-sm font-bold text-[#172b4d]">Bas374</p></div>
+        </div>
+        <a href="mailto:Chaiwat_bas@icloud.com" class="group flex items-center gap-3 rounded-xl border border-slate-200 p-3 hover:border-[#315b82] hover:bg-[#f8fafc] transition-all sm:col-span-2">
+          <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-blue-100 text-[#315b82]">✉️</div>
+          <div class="min-w-0"><p class="text-[10px] font-semibold uppercase text-slate-400">อีเมล</p><p class="text-xs sm:text-sm truncate font-bold text-[#172b4d]">Chaiwat_bas@icloud.com</p></div>
+        </a>
+        <div class="flex items-start gap-3 rounded-xl border border-slate-200 p-3 sm:col-span-2 bg-slate-50/50">
+          <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-red-100 text-red-500">📍</div>
+          <div><p class="text-[10px] font-semibold uppercase text-slate-400">ที่อยู่ปัจจุบัน</p><p class="text-xs sm:text-sm font-medium leading-relaxed text-[#172b4d]">711/467 ศุภาลัย พราวด์ ประชาอุทิศ ซอยประชาสามัคคี ตำบลในคลองบางปลากด อำเภอพระสมุทรเจดีย์ จังหวัดสมุทรปราการ 10290</p></div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="pb-6 pt-2 text-center text-xs text-slate-400 font-medium no-print">
+      © Resume · Chaiwat Raunrum
+    </footer>
+  </main>
+</div>
+
+<script>
+  const links = document.querySelectorAll('.nav-link[href^="#"]');
+  
+  links.forEach(link => {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      const targetId = this.getAttribute('href');
+      const targetSection = document.querySelector(targetId);
+      
+      if (targetSection) {
+        const offsetTop = targetSection.offsetTop - 65;
+        
+        window.scrollTo({
+          top: offsetTop,
+          behavior: 'smooth'
+        });
+        
+        links.forEach(l => l.classList.remove('active'));
+        this.classList.add('active');
+        
+        const mobileNav = document.getElementById('mobileNav');
+        if (mobileNav && window.innerWidth < 768) {
+          this.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+        }
+      }
+    });
+  });
+
+  const sections = document.querySelectorAll('main section');
+  const navObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const targetId = '#' + entry.target.id;
+        links.forEach(link => {
+          if (link.getAttribute('href') === targetId) {
+            link.classList.add('active');
+            const mobileNav = document.getElementById('mobileNav');
+            if (mobileNav && window.innerWidth < 768) {
+              link.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+            }
+          } else {
+            link.classList.remove('active');
+          }
+        });
+      }
+    });
+  }, { rootMargin: '-70px 0px -50% 0px', threshold: 0 });
+  
+  sections.forEach(section => navObserver.observe(section));
+
+  const reveals = document.querySelectorAll('.reveal');
+  const revealObserver = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('active');
+        const bars = entry.target.querySelectorAll('.progress-fill');
+        bars.forEach(bar => {
+          bar.style.width = bar.getAttribute('data-width');
+        });
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.05, rootMargin: "0px 0px -30px 0px" });
+
+  reveals.forEach(reveal => revealObserver.observe(reveal));
+</script>
+</body>
+</html>
+
+
+
+<?php
+
+
+
+
+// 7. ส่วนแสดงสถานะการตอบกลับ PO ลงในตาราง
+if ($wfDetNext == '') {
+    $replyStatus     = (string)($WF['PO_REPLY_STATUS'] ?? '0');
+    $isReplyApproved = ($replyStatus === '1');
+
+    // 0 = รอการตอบกลับ (เหลือง/ส้ม), 1 = ตอบกลับเรียบร้อย (เขียว)
+    $statusText      = $isReplyApproved ? 'ตอบกลับเรียบร้อย' : 'รอการตอบกลับ';
+    $statusIconClass = $isReplyApproved ? 'fa-check-circle text-success' : 'fa-times-circle text-danger';
+    $rawDetails      = $isReplyApproved ? ($WF['PO_REPLY_DETAILS'] ?? '') : '';
+
+    $attrTooltip = htmlspecialchars($statusText, ENT_QUOTES, 'UTF-8');
+    $attrDetails = htmlspecialchars($rawDetails, ENT_QUOTES, 'UTF-8');
+    $attrIcon    = htmlspecialchars($statusIconClass, ENT_QUOTES, 'UTF-8');
+    ?>
+    <script>
+    $(function() {
+        var spanHtml = '<span title="<?= $attrTooltip ?>" class="show-details" ' +
+            'style="cursor:pointer;" ' +
+            'data-tooltip="<?= $attrTooltip ?>" ' +
+            'data-details="<?= $attrDetails ?>" ' +
+            'data-icon="<?= $attrIcon ?>">' +
+            '<i class="fas <?= $statusIconClass ?>"></i>' +
+        '</span>';
+
+        $('#tr_wf_<?= $wfrId ?> td:nth-child(14)').html(spanHtml);
+    });
+    </script>
+    <?php
+}
+?>
+
+<!-- ========================================== -->
+<!-- [ส่วนที่ 3: JavaScript Modal ผูกไว้นอก Loop ท้ายหน้าเว็บ] -->
+<!-- ========================================== -->
+<script>
+$(document).off('click', '.show-details').on('click', '.show-details', function() {
+    const tooltipText     = $(this).data('tooltip') || '';
+    const details         = $(this).data('details') || '';
+    const statusIconClass = $(this).data('icon') || '';
+
+    let contentHtml = '<p style="font-style: italic; color: #888;"></p>';
+
+    if ($.trim(details) !== '') {
+        contentHtml = `
+            <p align="left" style="font-weight:bold; margin-bottom:8px;">รายละเอียดการดำเนินการ/บริการ:</p>
+            <div style="
+                white-space: pre-wrap; 
+                text-align: left; 
+                padding: 10px; 
+                border: 1px solid #ddd; 
+                border-radius: 4px; 
+                max-height: 300px; 
+                overflow-y: auto;
+                background-color: #f8f9fa;
+                font-size: 14px;
+            ">${$('<div>').text(details).html()}</div>`;
+    }
+
+    Swal.fire({
+        title: `<div><i style="font-size: 70px; margin-bottom: 8px;" class="fas ${statusIconClass}"></i></div> ${tooltipText}`,
+        html: contentHtml,
+        confirmButtonText: 'ปิด',
+        showCancelButton: false,
+        allowOutsideClick: true
+    });
+});
+</script>
+
+?>
